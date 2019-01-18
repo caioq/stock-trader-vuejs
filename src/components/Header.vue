@@ -26,9 +26,7 @@
           </div>
         </li>
         <li class="nav-item">
-          <span class="navbar-text">
-            Funds: R$ 0.000,00
-          </span>
+          <span class="navbar-text">Funds: R$ {{ funds }}</span>
         </li>
       </ul>
     </div>
@@ -36,6 +34,12 @@
 </template>
 
 <script>
-export default {};
+export default {
+  computed: {
+    funds () {
+      return this.$store.getters.totalFunds
+    }
+  }
+};
 </script>
 

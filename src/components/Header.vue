@@ -9,7 +9,7 @@
       <!-- Right -->
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">End Day</a>
+          <a class="nav-link" @click="endDay">End Day</a>
         </li>
         <li class="nav-item dropdown">
           <a
@@ -38,6 +38,11 @@ export default {
   computed: {
     funds () {
       return this.$store.getters.totalFunds
+    }
+  }, 
+  methods: {
+    endDay() {
+      this.$store.commit('updatePrices', {})
     }
   }
 };

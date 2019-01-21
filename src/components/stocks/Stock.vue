@@ -44,7 +44,15 @@ export default {
       }
     },
     sellStock() {
+      if(this.quant > 0){        
+        this.$store.commit('sellStock', {
+          stock: this.stock,
+          quant: Number(this.quant)
+          })
+        //TODO: add stock in portfolio
 
+        this.quant = '';
+      }
     }
   }
 };

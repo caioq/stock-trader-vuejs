@@ -7,18 +7,16 @@
     </h5>
     <div v-if="type=='buy'" class="card-body">
       <input type="number" placeholder="Quantity" v-model="quant">
-      <button 
-        @click="buyStock" 
+      <button
+        @click="buyStock"
         class="btn btn-success"
-        :disabled="((quant <= 0))">Buy</button>
+        :disabled="insufficientFunds || quant <= 0"
+      >Buy</button>
     </div>
     <!-- Sell Stock - Portfolio Page -->
     <div v-if="type=='sell'" class="card-body">
       <input type="number" placeholder="Quantity" v-model="quant">
-      <button 
-        @click="sellStock" 
-        class="btn btn-danger"
-        :disabled="((quant <= 0))">Sell</button>
+      <button @click="sellStock" class="btn btn-danger" :disabled="(quant <= 0)">Sell</button>
     </div>
   </div>
 </template>
@@ -28,30 +26,38 @@ export default {
   props: ["stock", "quantityPurchased", "type"],
   data() {
     return {
-      quant: ''
+      quant: ""
+    };
+  },
+  computed: {
+    funds() {
+      return this.$store.getters.funds;
+    },
+    insufficientFunds() {
+      return this.quant * this.stock.price > this.funds;
     }
   },
   methods: {
     buyStock() {
-      if(this.quant > 0){        
-        this.$store.commit('buyStock', {
+      if (this.quant > 0) {
+        this.$store.commit("buyStock", {
           stock: this.stock,
           quant: Number(this.quant)
-          })
+        });
         //TODO: add stock in portfolio
 
-        this.quant = '';
+        this.quant = "";
       }
     },
     sellStock() {
-      if(this.quant > 0){        
-        this.$store.commit('sellStock', {
+      if (this.quant > 0) {
+        this.$store.commit("sellStock", {
           stock: this.stock,
           quant: Number(this.quant)
-          })
+        });
         //TODO: add stock in portfolio
 
-        this.quant = '';
+        this.quant = "";
       }
     }
   }

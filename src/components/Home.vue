@@ -3,7 +3,7 @@
     <div class="card-body">
       <h1>Trade or View your Portfolio</h1>
       <p>Click on 'End Day' to begin a new day!</p>
-      <p class="title-bold">Your Funds: R$ {{ funds }}</p>
+      <p class="title-bold">Your Funds: {{ funds | currency }}</p>
     </div>
   </div>
 </template>

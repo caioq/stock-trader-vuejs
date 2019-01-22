@@ -11,7 +11,11 @@
         <li class="nav-item">
           <a class="nav-link" @click="endDay">End Day</a>
         </li>
-        <li class="nav-item dropdown">
+        <li
+          class="nav-item dropdown"
+          :class="{show: isDropdownOpen}"
+          @click="isDropdownOpen = !isDropdownOpen"
+        >
           <a
             class="nav-link dropdown-toggle"
             href="#"
@@ -20,31 +24,60 @@
             aria-haspopup="true"
             aria-expanded="false"
           >Load and Save</a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Load</a>
-            <a class="dropdown-item" href="#">Save</a>
+          <div
+            class="dropdown-menu"
+            :class="{show: isDropdownOpen}"
+            aria-labelledby="navbarDropdownMenuLink"
+          >
+            <a class="dropdown-item" @click="loadData">Load</a>
+            <a class="dropdown-item" @click="saveData">Save</a>
           </div>
         </li>
-        <li class="nav-item">
-          <span class="navbar-text">Funds: R$ {{ funds }}</span>
-        </li>
       </ul>
+      <strong class="navbar-text navbar-right">Funds: {{ funds | currency }}</strong>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapActions } from "vuex";
+import axios from 'axios';
+
 export default {
+  data() {
+    return {
+      isDropdownOpen: false
+    };
+  },
   computed: {
-    funds () {
-      return this.$store.getters.totalFunds
+    funds() {
+      return this.$store.getters.totalFunds;
     }
-  }, 
+  },
   methods: {
+    ...mapActions(["randomizeStocks", "loadDataProgress"]),
     endDay() {
-      this.$store.commit('updatePrices', {})
+      this.randomizeStocks();
+    },
+    saveData() {
+      const data = {
+        funds: this.$store.getters.totalFunds,
+        stockPortfolio: this.$store.getters.stocksPurchased,
+        stocks: this.$store.getters.stocksAvailable
+      };
+      axios.put('/data.json', data);
+    },
+    loadData() {    
+      this.loadDataProgress();
     }
   }
 };
 </script>
+
+<style scoped>
+a.nav-link {
+  cursor: pointer;
+}
+</style>
+
 
